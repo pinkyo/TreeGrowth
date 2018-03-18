@@ -1,4 +1,4 @@
-package sample;
+package my.yinkn.tree;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
