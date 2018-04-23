@@ -11,6 +11,15 @@ import javafx.scene.shape.Line;
 import java.util.List;
 
 public class Controller {
+    /**
+     * CIRCLE_STROKE_WIDTH_RATIO = CIRCLE_STROKE_WIDTH / LINE_STROKE_WIDTH
+     * LINE_STROKE_WIDTH: all branch line width;
+     * CIRCLE_STROKE_WIDTH: endpoint circle width of branches
+     */
+    private static final double CIRCLE_STROKE_WIDTH_RATIO = 1.5;
+    private static int MIN_GENERATION = 1;
+    private static int MAX_GENERATION = 7;
+
     @FXML
     private TextField textField;
 
@@ -20,12 +29,12 @@ public class Controller {
     private TreeGenerator generator = new TreeGenerator();
 
     @FXML
-    public void startGrown(MouseEvent mouseEvent) {
+    public void startGrown() {
         String text = textField.getText();
         try {
             Integer generation = Integer.parseInt(text);
-            if (generation < 0 || generation > 8) {
-                System.out.println(String.format("generation [%d] is invalid.", generation));
+            if (generation < MIN_GENERATION || generation > MAX_GENERATION) {
+                System.out.println(String.format("Generation [%d] is invalid.", generation));
                 return;
             }
 
@@ -38,7 +47,7 @@ public class Controller {
             lineList.forEach(line -> {
                 Circle circle = new Circle(line.getEndX(), line.getEndY(), line.getStrokeWidth());
                 circle.setStroke(Color.RED);
-                circle.setStrokeWidth(line.getStrokeWidth() * 1.5);
+                circle.setStrokeWidth(line.getStrokeWidth() * CIRCLE_STROKE_WIDTH_RATIO);
                 group.getChildren().add(circle);
             });
             textField.setDisable(false);

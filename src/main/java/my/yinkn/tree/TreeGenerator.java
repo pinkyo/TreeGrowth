@@ -6,22 +6,22 @@ import javafx.scene.shape.Line;
 import java.util.*;
 
 public class TreeGenerator {
-    private Random random = new Random();
+    private static final Line INITIAL_LINE = new Line(600, 1000, 600, 400);
+    private static final double MAX_LINE_STROKE_WIDTH = 5.0;
+    private static final Random random = new Random();
 
     public TreeGenerator() {
     }
 
     public List<Line> generate(int maxGeneration) {
-        Line initialLine = new Line(600, 1000, 600, 400);
-
         Queue<LineGeneration> queue = new LinkedList<>();
-        queue.add(new LineGeneration(initialLine, 0));
+        queue.add(new LineGeneration(INITIAL_LINE, 0));
 
         List<Line> lineList = new ArrayList<>();
         LineGeneration lineGeneration;
         while (Objects.nonNull(lineGeneration = queue.poll())) {
             Line line = lineGeneration.getLine();
-            line.setStrokeWidth(5 * (maxGeneration - lineGeneration.getGeneration() + 1) / maxGeneration);
+            line.setStrokeWidth(calLineStrokeWidth(lineGeneration.getGeneration(), maxGeneration));
             line.setStroke(Color.GREEN);
             lineList.add(line);
 
@@ -31,6 +31,17 @@ public class TreeGenerator {
         return lineList;
     }
 
+    /**
+     * line stroke with is related with generation number,
+     * The bigger generation number, the smaller stroke width.
+     * @param generation
+     * @param maxGeneration
+     * @return
+     */
+    private static double calLineStrokeWidth(int generation, int maxGeneration) {
+        return MAX_LINE_STROKE_WIDTH * (maxGeneration - generation + 1) / maxGeneration;
+    }
+
     private void forkNewBranch(
             Queue<LineGeneration> queue,
             LineGeneration lineGeneration,
@@ -38,7 +49,8 @@ public class TreeGenerator {
         if (lineGeneration.getGeneration() >= maxGeneration) return;
 
 
-        int numOfBranch = random.nextInt(3) + 3; // at most 4 branches.
+        // at most 5 branches, at least 3 branches.
+        int numOfBranch = random.nextInt(3) + 3;
 
         Line line = lineGeneration.getLine();
 

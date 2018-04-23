@@ -7,13 +7,14 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+    private static final String APP_NAME = "Tree Growth";
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(ClassLoader.getSystemClassLoader().getResource("sample.fxml"));
         
-        primaryStage.setTitle("Tree Growth");
+        primaryStage.setTitle(APP_NAME);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
